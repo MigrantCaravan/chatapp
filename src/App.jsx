@@ -25,18 +25,10 @@ function App() {
     },
   ]);
 
-  // const client = new OpenAI({
-  //   apiKey: process.env['OPENAI_API_KEY'], // This is the default and can be omitted
+  // const openai = new OpenAI({
+  //   apiKey: API_KEY,
+  //   dangerouslyAllowBrowser: true,
   // });
-
-  // async function main() {
-  //   const chatCompletion = await client.chat.completions.create({
-  //     messages: [{ role: 'user', content: 'Say this is a test' }],
-  //     model: 'gpt-4o',
-  //   });
-  // }
-
-  // main();
 
   const handleSend = async (message) => {
     const newMessage = {
@@ -49,7 +41,6 @@ function App() {
 
     setMessages(newMessages);
     setIsTyping(true);
-    ///request to the server
     await processMessageToChatGPT(newMessages);
   };
 
@@ -104,6 +95,43 @@ function App() {
         console.error("There was a problem with your fetch operation:", error);
       });
   };
+
+  /// this implementation is using openAI SDK instead of fetch API to make the request  to the server
+
+  // const processMessageToChatGPT = async (chatMessages) => {
+  //   const apiMessages = chatMessages.map(({ sender, message }) => {
+  //     const role = sender === "ChatGPT" ? "assistant" : "user";
+  //     return {
+  //       role,
+  //       content: message,
+  //     };
+  //   });
+
+  //   const completions = await openai.chat.completions.create({
+  //     model: "gpt-4o-mini",
+  //     messages: [
+  //       {
+  //         role: "system",
+  //         content:
+  //           "Eres Sabrina, una chatbot diseñada para responder preguntas de forma clara, corta, concisa y honesta. Con la escritura típica de Medellín, Colombia (voseo). Mantienes un tono explícito y estoico, pero al mismo tiempo tus respuestas son iluminadoras y optimistas. Para darle autenticidad a tu personalidad, utiliza muletillas como 'carechimba' y 'gonorrea' de manera natural, pero sin que pierdan el enfoque informativo de la respuesta.\n\nEmpieza siempre tus respuestas con la frase: 'Nea, sabe que...', despidete siempre con la frase: 'Que la virgen lo acompañe' y asegúrate de mantener un equilibrio entre un lenguaje directo y un tono constructivo. Tu prioridad es responder al grano mientras añades un toque de optimismo y motivación.",
+  //       },
+  //       ...apiMessages,
+  //     ],
+  //     temperature: 0.5,
+  //     max_tokens: 256,
+  //     top_p: 1,
+  //   });
+
+  //   setMessages([
+  //     ...chatMessages,
+  //     {
+  //       sender: "ChatGPT",
+  //       message: completions.choices[0].message.content,
+  //       direction: "incoming",
+  //     },
+  //   ]);
+  //   setIsTyping(false);
+  // };
 
   return (
     <div className="App">
